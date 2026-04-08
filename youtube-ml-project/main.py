@@ -31,6 +31,11 @@ from src.feature_engineering import add_title_sentiment
 from src.feature_engineering import add_clickbait_score
 from src.feature_engineering import add_seo_score
 
+from src.model_training import train_engagement_model
+# To increase the number of features we can add a model to predict engagement_rate instead of likes, using the same features as the likes model 
+# And then we can use the predictions of this model as a feature in the likes model, this way we can capture the relationship between engagement_rate and likes
+from src.data_preprocessing import add_advanced_features
+
 from src.data_loader import load_dataset
 from src.data_preprocessing import (
     optimize_memory,
@@ -46,6 +51,7 @@ df = clean_data(df)
 df = add_engagement_rate(df)
 df = convert_duration_to_seconds(df)
 df = extract_time_features(df)
+df = add_advanced_features(df)
 
 print("Structural feature engineering completed")
 print(df.shape)
@@ -69,3 +75,5 @@ print(df[["title", "seo_score"]].head())
 from src.model_training import train_likes_model
 
 model_likes, feature_columns = train_likes_model(df)
+# model_engagement = train_engagement_model(df)
+model_engagement = train_engagement_model(df)

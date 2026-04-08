@@ -92,3 +92,17 @@ def extract_time_features(df):
     df.drop("publish_time", axis=1, inplace=True)
 
     return df
+
+import numpy as np
+
+def add_advanced_features(df):
+
+    # 1️⃣ Channel strength ratio
+    df["subscriber_per_video"] = (
+        df["channel_subscriber_count"] / (df["channel_video_count"] + 1)
+    )
+
+    # 2️⃣ Log transform video length (reduces skew)
+    df["log_video_length"] = np.log1p(df["video_length"])
+
+    return df

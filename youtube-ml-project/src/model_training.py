@@ -5,7 +5,6 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, r2_score
 import pandas as pd
 
-
 def train_likes_model(df):
 
     df["log_likes"] = np.log1p(df["likes"])
@@ -67,3 +66,55 @@ def train_likes_model(df):
     print("MAE (Original Likes Scale):", round(mae_original, 2))
 
     return model , X.columns
+
+# engagement model with same features but predicting engagement_rate instead of likes
+
+def train_engagement_model(df):
+
+    # Features (NO leakage)
+    X = df[
+        [
+            "title_sentiment",
+            "clickbait_score",
+            "seo_score",
+            "upload_hour",
+            "day_of_week",
+            "log_video_length",
+            "subscriber_per_video"
+        ]
+    ]
+
+    # Encode category
+    category_dummies = pd.get_dummies(
+        df["category_id"],
+        prefix="cat",
+        drop_first=True
+    )
+
+    X = pd.concat([X, category_dummies], axis=1)
+
+    # Target
+    y = df["engagement_rate"]
+
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_absolute_error, r2_score
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+
+    model = LinearRegression()
+
+    model.fit(X_train, y_train)
+
+    predictions = model.predict(X_test)
+
+    mae = mean_absolute_error(y_test, predictions)
+    r2 = r2_score(y_test, predictions)
+
+    print("\nEngagement Model Performance:")
+    print("MAE:", round(mae, 4))
+    print("R2 Score:", round(r2, 4))
+
+    return model
