@@ -58,26 +58,19 @@ print(df.shape)
 print(df[["video_length", "upload_hour", "day_of_week"]].head())
 
 df = add_title_sentiment(df)
-
 print("Sentiment feature added")
-print(df[["title", "title_sentiment"]].head())
 
 df = add_clickbait_score(df)
-
 print("Clickbait feature added")
-print(df[["title", "clickbait_score"]].head())
 
 df = add_seo_score(df)
-
 print("SEO feature added")
-print(df[["title", "seo_score"]].head())
 
 from src.model_training import train_likes_model
 
-model_likes, feature_columns = train_likes_model(df)
-# model_engagement = train_engagement_model(df)
-model_engagement = train_engagement_model(df)
+model_likes, likes_features = train_likes_model(df)
+model_engagement, eng_features = train_engagement_model(df)
 
 from src.model_training import save_models
 
-save_models(model_likes, model_engagement, feature_columns)
+save_models(model_likes, model_engagement, likes_features, eng_features)

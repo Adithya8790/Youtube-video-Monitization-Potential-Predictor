@@ -7,7 +7,7 @@ from app.utils.load_model import load_models
 router = APIRouter()
 
 # Load models once when server starts
-likes_model, engagement_model, feature_columns = load_models()
+likes_model, engagement_model, likes_features, engagement_features = load_models()
 
 
 @router.post("/predict", response_model=PredictionOutput)
@@ -21,7 +21,8 @@ def predict_video(input_data: VideoInput):
         data,
         likes_model,
         engagement_model,
-        feature_columns
+        likes_features,
+        engagement_features
     )
 
     return result

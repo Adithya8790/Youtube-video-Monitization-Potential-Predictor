@@ -7,4 +7,3 @@ class VideoInput(BaseModel):
     video_length: float
     category_id: str
     upload_hour: int
-    
