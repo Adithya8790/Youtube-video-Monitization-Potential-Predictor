@@ -77,3 +77,7 @@ from src.model_training import train_likes_model
 model_likes, feature_columns = train_likes_model(df)
 # model_engagement = train_engagement_model(df)
 model_engagement = train_engagement_model(df)
+
+from src.model_training import save_models
+
+save_models(model_likes, model_engagement, feature_columns)

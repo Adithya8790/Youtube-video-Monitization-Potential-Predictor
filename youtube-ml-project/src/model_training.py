@@ -118,3 +118,15 @@ def train_engagement_model(df):
     print("R2 Score:", round(r2, 4))
 
     return model
+import pickle
+import os
+
+def save_models(model_likes, model_engagement, feature_columns):
+
+    os.makedirs("models", exist_ok=True)
+
+    pickle.dump(model_likes, open("models/likes_model.pkl", "wb"))
+    pickle.dump(model_engagement, open("models/engagement_model.pkl", "wb"))
+    pickle.dump(feature_columns, open("models/features.pkl", "wb"))
+
+    print("\n✅ Models saved successfully!")
