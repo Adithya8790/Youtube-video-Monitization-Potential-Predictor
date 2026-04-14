@@ -18,11 +18,11 @@ function computeLocalExtras(formData, scaleRatio = 1) {
   const lower = title.toLowerCase();
   
   // Sentiment
-  const pos = ['amazing','best','great','awesome','top','ultimate','new','incredible','master','unlock','transform'];
-  const neg = ['worst','bad','fail','never','stop','avoid','terrible'];
-  let sent = 0;
-  pos.forEach(w => { if (lower.includes(w)) sent += 0.2; });
-  neg.forEach(w => { if (lower.includes(w)) sent -= 0.2; });
+  const pos = ['amazing','best','great','awesome','top','ultimate','new','incredible','master','unlock','transform','how to','guide','easy','fast','quick','pro','expert','viral','boost','grow','success','win','proven','secret','tips','tricks','strategies','perfect'];
+  const neg = ['worst','bad','fail','never','stop','avoid','terrible','scam','warning','danger','mistake','lose','ruin','horrible','hate','don\'t','stop','dumb'];
+  let sent = 0.05; // Slight base sentiment for neutral titles
+  pos.forEach(w => { if (lower.includes(w)) sent += 0.25; });
+  neg.forEach(w => { if (lower.includes(w)) sent -= 0.25; });
   sent = Math.max(-1, Math.min(1, sent));
 
   // Clickbait
@@ -60,6 +60,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(null);
   const [extras, setExtras] = useState(null);
+  const [formKey, setFormKey] = useState(0);
   
   // Theme Toggle State
   const [isLight, setIsLight] = useState(false);
@@ -105,14 +106,14 @@ export default function App() {
     }
   };
 
-  const handleReset = () => { setResult(null); setFormData(null); setExtras(null); setTimeout(() => scrollForm(), 100); };
+  const handleReset = () => { setResult(null); setFormData(null); setExtras(null); setFormKey(k => k + 1); setTimeout(() => scrollForm(), 100); };
 
   return (
     <>
       <nav className="navbar">
         <a href="#" className="nav-logo">
           <div className="logo-icon">IQ</div>
-          CreatorAI
+          ViralBoost
         </a>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
           <ul className="nav-links">
@@ -127,7 +128,7 @@ export default function App() {
 
       <Hero onStart={scrollForm} onHowItWorks={scrollHow} />
       <div ref={howRef}><HowItWorks /></div>
-      <div ref={formRef}><InputForm onSubmit={handleSubmit} loading={loading} /></div>
+      <div ref={formRef}><InputForm key={formKey} onSubmit={handleSubmit} loading={loading} /></div>
 
       <div ref={resRef} style={{ minHeight: loading || result ? '100vh' : 0 }}>
         <AnimatePresence mode="wait">
@@ -159,7 +160,7 @@ export default function App() {
 
       <footer style={{ padding: '48px 60px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', color: 'var(--muted)', fontSize: '0.9rem' }}>
         <div>
-          <strong style={{ color: 'var(--text)', fontFamily: 'Space Grotesk' }}>CreatorAI</strong>
+          <strong style={{ color: 'var(--text)', fontFamily: 'Space Grotesk' }}>ViralBoost</strong>
           <div style={{ marginTop: 4 }}>© 2026 AI-Powered Creator Tools. Predict your potential.</div>
         </div>
         <div style={{ display: 'flex', gap: 24 }}>

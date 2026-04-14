@@ -340,7 +340,7 @@ export default function InputForm({ onSubmit, loading }) {
                 Continue →
               </button>
             ) : (
-              <button className="btn-green" onClick={submit} disabled={loading} id="submit-btn">
+              <button className="btn-primary" onClick={submit} disabled={loading} id="submit-btn" style={{ padding: '16px 36px', fontSize: '1.05rem', boxShadow: '0 4px 20px rgba(99,102,241,0.4)' }}>
                 {loading ? '⏳ Analyzing...' : '🤖 Analyze My Video'}
               </button>
             )}
