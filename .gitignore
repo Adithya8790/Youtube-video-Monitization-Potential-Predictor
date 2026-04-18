@@ -2,7 +2,19 @@ venv/
 __pycache__/
 *.pyc
 data/
-*.pkl
+
 *.joblib
 .env
-/data/youtube_dataset.csv
+
+# Large data
+data/
+
+# Model files (often large)
+models/*.pkl
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
