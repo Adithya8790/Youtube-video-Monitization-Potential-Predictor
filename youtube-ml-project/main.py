@@ -45,7 +45,7 @@ from src.data_preprocessing import (
     extract_time_features
 )
 
-df = load_dataset("data/youtube_trending_videos_global.csv")
+df = load_dataset("data/youtube_trending_videos_global.csv", nrows=1000)
 df = optimize_memory(df)
 df = clean_data(df)
 df = add_engagement_rate(df)

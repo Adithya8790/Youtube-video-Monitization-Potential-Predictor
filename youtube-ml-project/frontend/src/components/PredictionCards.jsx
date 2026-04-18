@@ -94,16 +94,57 @@ const KPI_META = {
   High:   { icon: '💰', color: 'var(--green)',  glow: '#10B981', tag: 'Strong monetization' },
 };
 
-export default function PredictionCards({ result, extras }) {
+export default function PredictionCards({ result, extras, scoreOnly }) {
   const { predicted_likes, engagement_rate, monetization } = result;
   const meta = KPI_META[monetization] || KPI_META.Medium;
+
+  // Single score view (e.g., clicked "SEO Score" in sidebar)
+  if (scoreOnly && extras) {
+    const scoreTypes = scoreOnly === 'seo' ? ['seo'] : scoreOnly === 'clickbait' ? ['clickbait'] : ['sentiment'];
+
+    return (
+      <div className="scores-section" style={{ marginBottom: 0 }}>
+        <div className="scores-title" style={{ marginBottom: 24 }}>
+          {scoreOnly === 'seo' ? '🔍 SEO Score Analysis' : scoreOnly === 'clickbait' ? '💡 Clickbait Score Analysis' : '❤️ Sentiment Analysis'}
+        </div>
+        {/* Also show the relevant KPI */}
+        <div className="kpi-grid" style={{ marginBottom: 32 }}>
+          <motion.div className="kpi-card glass" custom={0} variants={cardVariants} initial="hidden" animate="show">
+            <div className="kpi-icon">👍</div>
+            <div className="kpi-label">Predicted Likes</div>
+            <div className="kpi-value">{Number(predicted_likes).toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+            <div className="kpi-sub">estimated in first 30 days</div>
+          </motion.div>
+          <motion.div className="kpi-card glass" custom={1} variants={cardVariants} initial="hidden" animate="show">
+            <div className="kpi-icon">📈</div>
+            <div className="kpi-label">Engagement Rate</div>
+            <div className="kpi-value">{(engagement_rate * 100).toFixed(2)}%</div>
+            <div className="kpi-sub">{engagement_rate >= 0.05 ? '🔥 Above average' : engagement_rate >= 0.02 ? '✅ Average' : '⚠️ Below average'}</div>
+          </motion.div>
+          <motion.div className="kpi-card glass" custom={2} variants={cardVariants} initial="hidden" animate="show">
+            <div className="kpi-icon">{meta.icon}</div>
+            <div className="kpi-label">Monetization Level</div>
+            <div className="kpi-value" style={{ color: meta.color }}>{monetization}</div>
+            <div className="kpi-sub" style={{ color: meta.color }}>{meta.tag}</div>
+          </motion.div>
+        </div>
+        <div className="scores-grid" style={{ gridTemplateColumns: '1fr' }}>
+          {scoreTypes.map(type => (
+            <ScoreCard key={type} type={type}
+              value={type === 'seo' ? extras.seo_score : type === 'clickbait' ? extras.clickbait_score : extras.title_sentiment}
+              delay={0.2}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       {/* ── KPI Cards ── */}
       <div className="kpi-grid">
         <motion.div className="kpi-card glass kpi-likes" custom={0} variants={cardVariants} initial="hidden" animate="show">
-          <div className="kpi-glow" />
           <div className="kpi-icon">👍</div>
           <div className="kpi-label">Predicted Likes</div>
           <div className="kpi-value">{Number(predicted_likes).toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
@@ -111,7 +152,6 @@ export default function PredictionCards({ result, extras }) {
         </motion.div>
 
         <motion.div className="kpi-card glass kpi-engage" custom={1} variants={cardVariants} initial="hidden" animate="show">
-          <div className="kpi-glow" />
           <div className="kpi-icon">📈</div>
           <div className="kpi-label">Engagement Rate</div>
           <div className="kpi-value">{(engagement_rate * 100).toFixed(2)}%</div>
@@ -123,7 +163,6 @@ export default function PredictionCards({ result, extras }) {
         </motion.div>
 
         <motion.div className="kpi-card glass kpi-money" custom={2} variants={cardVariants} initial="hidden" animate="show">
-          <div className="kpi-glow" />
           <div className="kpi-icon">{meta.icon}</div>
           <div className="kpi-label">Monetization Level</div>
           <div className="kpi-value" style={{ color: meta.color }}>{monetization}</div>
