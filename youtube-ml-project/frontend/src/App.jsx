@@ -148,6 +148,7 @@ export default function App() {
   const scrollHow  = () => howRef.current?.scrollIntoView({ behavior: 'smooth' });
   const scrollForm = () => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+  
   const handleSubmit = async (data) => {
     setFormData(data); setLoading(true); setResult(null);
     setExtras(computeLocalExtras(data));
